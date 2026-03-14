@@ -104,7 +104,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.55 }}
           >
-            {[['< 3s', 'Result time'], ['25+', 'Data points'], ['99.2%', 'Model accuracy']].map(([val, lbl]) => (
+            {[['< 3s', 'Result time'], ['10', 'Model features'], ['98.67%', 'Model accuracy']].map(([val, lbl]) => (
               <div key={lbl} className="hero-stat">
                 <span className="stat-val">{val}</span>
                 <span className="stat-lbl">{lbl}</span>
@@ -192,7 +192,7 @@ export default function LandingPage() {
           <div className="steps-grid">
             {[
               { num: '01', title: 'Enter your details', desc: 'Fill in your loan requirements and financial profile through our guided, step-by-step form.', color: 'var(--blue-pale)' },
-              { num: '02', title: 'AI analyzes your profile', desc: 'Our model evaluates 25+ financial indicators — from FICO score to debt-to-income ratio.', color: 'var(--gold-pale)' },
+              { num: '02', title: 'AI analyzes your profile', desc: 'Our XGBoost model evaluates 10 financial indicators — FICO score, DTI ratio, employment stability, and more.', color: 'var(--gold-pale)' },
               { num: '03', title: 'Receive your result', desc: 'Get a clear acceptance decision, credit score, risk band, and a full breakdown of influencing factors.', color: 'var(--cream-mid)' },
             ].map((s, i) => (
               <motion.div key={s.num} className="step-card" style={{ '--step-bg': s.color }} {...fadeUp(i * 0.12)}>
@@ -225,7 +225,7 @@ export default function LandingPage() {
             public records, and more — to give you a result you can actually trust.
           </p>
           <ul className="split-list">
-            {['25+ financial data points analyzed', 'Explainable AI — see every factor', 'Risk band classification', 'Instant, no-impact assessment'].map(item => (
+            {['10 financial features analyzed', 'Explainable AI — see every factor', 'Risk band classification', 'Instant, no-impact assessment'].map(item => (
               <li key={item}><span className="list-check">✦</span>{item}</li>
             ))}
           </ul>
@@ -247,7 +247,7 @@ export default function LandingPage() {
               { icon: '🔍', title: 'Transparent Scoring', desc: 'Every factor that influenced your result is clearly explained.', bg: 'var(--gold-pale)' },
               { icon: '🔒', title: 'Secure & Private', desc: 'Your data is never stored or shared. Analysis happens in real time.', bg: 'var(--cream-mid)' },
               { icon: '📊', title: 'Risk Classification', desc: 'Low, Medium, or High risk — with a full breakdown of what it means.', bg: 'var(--blue-pale)' },
-              { icon: '🧠', title: 'ML-Powered Model', desc: 'Trained on real lending data for accurate, unbiased predictions.', bg: 'var(--cream-mid)' },
+              { icon: '🧠', title: 'ML-Powered Model', desc: 'XGBoost classifier trained on 160,000 real loan records with 98.67% accuracy.', bg: 'var(--cream-mid)' },
               { icon: '📋', title: 'Detailed Report', desc: 'Positive and negative factors listed so you know exactly where you stand.', bg: 'var(--gold-pale)' },
             ].map((f, i) => (
               <motion.div key={f.title} className="feat-card" style={{ '--feat-bg': f.bg }} {...fadeUp(i * 0.07)}>
@@ -291,7 +291,7 @@ export default function LandingPage() {
             so you can improve your profile, not just wonder about the outcome.
           </p>
           <div className="accuracy-stats">
-            {[['849', 'Max credit score'], ['0.0%', 'Min default prob.'], ['25+', 'Factors analyzed']].map(([v, l]) => (
+            {[['850', 'Max credit score'], ['98.67%', 'Model accuracy'], ['10', 'Features analyzed']].map(([v, l]) => (
               <div key={l} className="acc-stat">
                 <div className="acc-val">{v}</div>
                 <div className="acc-lbl">{l}</div>

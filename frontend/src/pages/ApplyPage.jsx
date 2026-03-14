@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import ResultPanel from '../components/ResultPanel'
+import MonthYearPicker from '../components/MonthYearPicker'
 import '../styles/Apply.css'
 
 // optional: true means the field is not required to proceed
@@ -40,7 +41,7 @@ const STEPS = [
     fields: [
       { key: 'fico_range_low',   label: 'FICO Score (Low)',               type: 'number', placeholder: '700' },
       { key: 'fico_range_high',  label: 'FICO Score (High)',              type: 'number', placeholder: '704' },
-      { key: 'earliest_cr_line', label: 'Earliest Credit Line',           type: 'text',   placeholder: 'Jan-2010', hint: 'Format: Mon-YYYY' },
+      { key: 'earliest_cr_line', label: 'Earliest Credit Line',           type: 'monthyear', placeholder: 'Jan-2010' },
       { key: 'inq_last_6mths',   label: 'Credit Inquiries (Last 6 mo.)', type: 'number', placeholder: '1' },
       { key: 'delinq_2yrs',      label: 'Delinquencies (Last 2 yrs)',    type: 'number', placeholder: '0', optional: true },
     ]
@@ -68,7 +69,7 @@ const STEPS = [
       { key: 'delinq_amnt',           label: 'Delinquent Amount',                 type: 'number', prefix: '$', placeholder: '0', optional: true },
       { key: 'num_tl_30dpd',          label: 'Accounts 30 Days Past Due',         type: 'number', placeholder: '0', optional: true },
       { key: 'num_tl_90g_dpd_24m',    label: 'Accounts 90+ Days Past Due (24mo)', type: 'number', placeholder: '0', optional: true },
-      { key: 'issue_d',               label: 'Issue Date',                        type: 'text',   placeholder: 'Mar-2026', hint: 'Format: Mon-YYYY' },
+      { key: 'issue_d',               label: 'Issue Date',                        type: 'monthyear', placeholder: 'Mar-2026' },
     ]
   }
 ]
@@ -102,7 +103,6 @@ function validate(fields, values) {
   })
   return errors
 }
-
 export default function ApplyPage() {
   const navigate = useNavigate()
   const [step, setStep]     = useState(0)
@@ -297,6 +297,14 @@ export default function ApplyPage() {
                             <option key={o} value={o}>{o.replace(/_/g, ' ')}</option>
                           ))}
                         </select>
+                      ) : field.type === 'monthyear' ? (
+                        <MonthYearPicker
+                          id={field.key}
+                          value={values[field.key]}
+                          onChange={val => { set(field.key, val); touch(field.key) }}
+                          placeholder={field.placeholder}
+                          maxDate={field.key === 'earliest_cr_line' ? 'Mar-2026' : undefined}
+                        />
                       ) : (
                         <div className="input-wrap">
                           {field.prefix && <span className="input-affix input-prefix">{field.prefix}</span>}
