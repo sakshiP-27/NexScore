@@ -1,8 +1,8 @@
-# CreditSense 💳
+# NexScore 💳
 
 > Know your loan eligibility before you walk into a bank. Knowledge is leverage.
 
-CreditSense is an AI-powered loan eligibility prediction web app. Enter your financial profile, and an XGBoost model trained on 160,000 real loan records tells you — in under 3 seconds — whether you'd be accepted or rejected, why, and what your credit score looks like.
+NexScore is an AI-powered loan eligibility prediction web app. Enter your financial profile, and an XGBoost model trained on 160,000 real loan records tells you — in under 3 seconds — whether you'd be accepted or rejected, why, and what your credit score looks like.
 
 ---
 
@@ -19,7 +19,7 @@ CreditSense is an AI-powered loan eligibility prediction web app. Enter your fin
 ## 🗂 Project Structure
 
 ```
-creditsense/
+NexScore/
 ├── frontend/          # React + Vite UI
 │   └── src/
 │       ├── pages/     # LandingPage, ApplyPage
@@ -63,8 +63,8 @@ The model was trained exclusively on features present in **both** datasets to av
 ### 1. Clone & set up Python env
 
 ```bash
-git clone https://github.com/your-username/creditsense.git
-cd creditsense
+git clone https://github.com/your-username/NexScore.git
+cd NexScore
 
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate

@@ -190,7 +190,7 @@ export default function ApplyPage() {
       <aside className="apply-sidebar">
         <div className="sidebar-logo" onClick={() => navigate('/')}>
           <LogoMark />
-          <span>CreditSense</span>
+          <span>NexScore</span>
         </div>
 
         <div className="sidebar-intro">
