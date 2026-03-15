@@ -93,10 +93,19 @@ const slideVariants = {
 function validate(fields, values) {
   const errors = {}
   fields.forEach(f => {
+    const v = values[f.key]
     if (!f.optional && f.type !== 'select') {
-      const v = values[f.key]
       if (v === '' || v === null || v === undefined) {
         errors[f.key] = 'This field is required'
+        return
+      }
+    }
+    if (f.type === 'number' && v !== '' && v !== null && v !== undefined) {
+      const num = Number(v)
+      if (f.min !== undefined && num < f.min) {
+        errors[f.key] = `Must be at least ${f.min}`
+      } else if (f.max !== undefined && num > f.max) {
+        errors[f.key] = `Must be at most ${f.max}`
       }
     }
   })
@@ -315,17 +324,8 @@ export default function ApplyPage() {
                             type={field.type}
                             placeholder={field.placeholder}
                             value={values[field.key]}
-                            min={field.min !== undefined ? field.min : (field.type === 'number' ? 0 : undefined)}
-                            max={field.max !== undefined ? field.max : undefined}
                             onChange={e => {
-                              const val = e.target.value
-                              if (field.type === 'number' && val !== '') {
-                                const num = Number(val)
-                                const minVal = field.min !== undefined ? field.min : 0
-                                const maxVal = field.max !== undefined ? field.max : Infinity
-                                if (num < minVal || num > maxVal) return
-                              }
-                              set(field.key, val)
+                              set(field.key, e.target.value)
                             }}
                             onKeyDown={e => {
                               if (field.type === 'number' && e.key === '-') e.preventDefault()
