@@ -32,8 +32,27 @@ export default function ResultPanel({ result, onReset }) {
   const pct      = Math.min((credit_score / 850) * 100, 100)
   const offset   = CIRCUMFERENCE * (1 - pct / 100)
 
+  // Borderline = accepted but not Low Risk, or rejected but not High Risk
+  const isBorderline = (accepted && risk_band !== 'Low Risk') || (!accepted && risk_band !== 'High Risk')
+
   // strip ✓/✗ prefix the backend may add → we render our own indicators
   const clean = s => s.replace(/^[✓✗]\s*/, '').trim()
+
+  const headline = accepted
+    ? isBorderline
+      ? <>Your application was <em>conditionally accepted</em></>
+      : <>Your application looks <em>strong</em></>
+    : isBorderline
+      ? <>Your application <em>needs improvement</em></>
+      : <>Your application needs <em>attention</em></>
+
+  const subline = accepted
+    ? isBorderline
+      ? 'Your profile meets the minimum threshold, but there are areas that could strengthen your position. Review the factors below.'
+      : 'Based on your financial profile, our model predicts a high likelihood of loan acceptance.'
+    : isBorderline
+      ? 'Your profile is close to the acceptance threshold. Addressing the factors below could improve your chances significantly.'
+      : 'Our model identified several risk factors in your profile. See the breakdown below.'
 
   return (
     <div className={`result-page ${accepted ? 'mood-accepted' : 'mood-rejected'}`}>
@@ -96,20 +115,14 @@ export default function ResultPanel({ result, onReset }) {
             initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
           >
-            {accepted
-              ? <>Your application looks <em>strong</em></>
-              : <>Your application needs <em>attention</em></>
-            }
+            {headline}
           </motion.h1>
 
           <motion.p className="res-subline"
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            {accepted
-              ? 'Based on your financial profile, our model predicts a high likelihood of loan acceptance.'
-              : 'Our model identified several risk factors in your profile. See the breakdown below.'
-            }
+            {subline}
           </motion.p>
 
           {/* ── KEY METRICS ROW ── */}

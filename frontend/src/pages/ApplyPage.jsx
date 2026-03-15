@@ -14,7 +14,7 @@ const STEPS = [
     fields: [
       { key: 'loan_amnt',   label: 'Loan Amount',         type: 'number', prefix: '$', placeholder: '15000',  tooltip: 'The total amount of money you want to borrow.' },
       { key: 'term',        label: 'Loan Term',           type: 'select', options: ['36 months','60 months'],  tooltip: 'Duration over which you will repay the loan.' },
-      { key: 'purpose',     label: 'Loan Purpose',        type: 'select', options: ['debt_consolidation','credit_card','home_improvement','major_purchase','medical','car','small_business','vacation','moving','house','renewable_energy','educational','other'], tooltip: 'The primary reason you are taking this loan.' },
+      { key: 'purpose',     label: 'Loan Purpose',        type: 'select', options: ['Debt consolidation','Credit card','Home improvement','Major purchase','Medical','Car','Small business','Vacation','Moving','House','Renewable energy','Educational','Other'], tooltip: 'The primary reason you are taking this loan.' },
       { key: 'int_rate',    label: 'Interest Rate',       type: 'number', suffix: '%', placeholder: '12.5',   tooltip: 'Annual interest rate charged on the loan, expressed as a percentage.' },
       { key: 'installment', label: 'Monthly Installment', type: 'number', prefix: '$', placeholder: '502.30', tooltip: 'Fixed monthly payment amount including principal and interest.', optional: true, hint: 'Leave blank if unknown' },
     ]
@@ -27,8 +27,8 @@ const STEPS = [
     fields: [
       { key: 'annual_inc',          label: 'Annual Income',        type: 'number', prefix: '$', placeholder: '75000', tooltip: 'Your total yearly income before taxes.' },
       { key: 'emp_length',          label: 'Employment Length',    type: 'select', options: ['< 1 year','1 year','2 years','3 years','4 years','5 years','6 years','7 years','8 years','9 years','10+ years'], tooltip: 'How long you have been employed at your current or most recent job.' },
-      { key: 'home_ownership',      label: 'Home Ownership',       type: 'select', options: ['RENT','OWN','MORTGAGE','OTHER'], tooltip: 'Your current housing situation → whether you rent, own outright, or have a mortgage.' },
-      { key: 'verification_status', label: 'Income Verification',  type: 'select', options: ['Verified','Source Verified','Not Verified'], tooltip: 'Whether your income has been independently verified by the lender.' },
+      { key: 'home_ownership',      label: 'Home Ownership',       type: 'select', options: ['Rent','Own','Mortgage','Other'], tooltip: 'Your current housing situation → whether you rent, own outright, or have a mortgage.' },
+      { key: 'verification_status', label: 'Income Verification',  type: 'select', options: ['Verified','Source verified','Not verified'], tooltip: 'Whether your income has been independently verified by the lender.' },
       { key: 'dti',                 label: 'Debt-to-Income Ratio', type: 'number', suffix: '%', placeholder: '18.5', tooltip: 'Your total monthly debt payments divided by gross monthly income, as a percentage. Lower is better.', hint: 'Monthly debt ÷ monthly income × 100' },
     ]
   },
@@ -38,8 +38,8 @@ const STEPS = [
     subtitle: 'Your credit profile helps us assess risk accurately.',
     icon: '◉',
     fields: [
-      { key: 'fico_range_low',   label: 'FICO Score (Low)',              type: 'number', placeholder: '700',      tooltip: 'The lower bound of your FICO credit score range. Scores range from 300 to 850.' },
-      { key: 'fico_range_high',  label: 'FICO Score (High)',             type: 'number', placeholder: '704',      tooltip: 'The upper bound of your FICO credit score range.' },
+      { key: 'fico_range_low',   label: 'FICO Score (Low)',              type: 'number', placeholder: '700',      tooltip: 'The lower bound of your FICO credit score range. Scores range from 300 to 850.', min: 300, max: 850 },
+      { key: 'fico_range_high',  label: 'FICO Score (High)',             type: 'number', placeholder: '704',      tooltip: 'The upper bound of your FICO credit score range.', min: 300, max: 850 },
       { key: 'earliest_cr_line', label: 'Earliest Credit Line',          type: 'monthyear', placeholder: 'Jan-2010', tooltip: 'The month and year your oldest credit account was opened. Longer history is generally better.' },
       { key: 'inq_last_6mths',   label: 'Credit Inquiries (Last 6 mo.)', type: 'number', placeholder: '1',        tooltip: 'Number of hard credit inquiries in the past 6 months. More inquiries can lower your score.' },
       { key: 'delinq_2yrs',      label: 'Delinquencies (Last 2 yrs)',    type: 'number', placeholder: '0',        tooltip: 'Number of times you were 30+ days past due on a payment in the last 2 years.', optional: true },
@@ -75,8 +75,8 @@ const STEPS = [
 
 const DEFAULT_VALUES = {
   loan_amnt: '', term: '36 months', int_rate: '', installment: '',
-  purpose: 'debt_consolidation', annual_inc: '', dti: '',
-  home_ownership: 'RENT', emp_length: '5 years',
+  purpose: 'Debt consolidation', annual_inc: '', dti: '',
+  home_ownership: 'Rent', emp_length: '5 years',
   verification_status: 'Verified', inq_last_6mths: '', delinq_2yrs: '',
   open_acc: '', total_acc: '', revol_bal: '', revol_util: '',
   pub_rec: '', pub_rec_bankruptcies: '', earliest_cr_line: '',
@@ -315,7 +315,21 @@ export default function ApplyPage() {
                             type={field.type}
                             placeholder={field.placeholder}
                             value={values[field.key]}
-                            onChange={e => set(field.key, e.target.value)}
+                            min={field.min !== undefined ? field.min : (field.type === 'number' ? 0 : undefined)}
+                            max={field.max !== undefined ? field.max : undefined}
+                            onChange={e => {
+                              const val = e.target.value
+                              if (field.type === 'number' && val !== '') {
+                                const num = Number(val)
+                                const minVal = field.min !== undefined ? field.min : 0
+                                const maxVal = field.max !== undefined ? field.max : Infinity
+                                if (num < minVal || num > maxVal) return
+                              }
+                              set(field.key, val)
+                            }}
+                            onKeyDown={e => {
+                              if (field.type === 'number' && e.key === '-') e.preventDefault()
+                            }}
                             onBlur={() => touch(field.key)}
                             className={`${field.prefix ? 'has-prefix' : ''} ${field.suffix ? 'has-suffix' : ''}`}
                           />
